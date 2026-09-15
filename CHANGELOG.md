@@ -5,6 +5,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-15
+
 ### Added
 
 - Two-factor authentication for administrators with a choice of passkey (WebAuthn) or authenticator app (TOTP).
@@ -15,3 +17,6 @@ All notable changes to this project are documented in this file. The format foll
 - Integration with `calmfox/sylius-admin-invitation-plugin`: invited administrators pair right after setting their password.
 - Access to the 2FA pages granted by route name; the policy condition and the admin form renderer apply to administrators only.
 - English and Polish translations.
+
+[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/releases/tag/v1.0.0

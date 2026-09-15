@@ -31,6 +31,28 @@ Two-factor authentication for the Sylius 2 administration panel, built on [scheb
 - **Invitations:** with [calmfox/sylius-admin-invitation-plugin](https://github.com/calmfoxpl/sylius-admin-invitation-plugin) installed, a new administrator pairs a second factor right after setting their password.
 - **Translations:** English and Polish.
 
+## Screenshots
+
+Setup offers a passkey first and an authenticator app next; at login the administrator confirms with a passkey or a code:
+
+<table>
+  <tr>
+    <td valign="top" rowspan="2"><img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/setup.png" width="330" alt="Two-factor setup page"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/login-passkey.png" width="330" alt="Second factor with a passkey"></td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/login-code.png" width="330" alt="Second factor with an authenticator app code"></td>
+  </tr>
+</table>
+
+*Administrators* shows who has which method, the edit page gets a card with *Reset 2FA* and *Turn off 2FA*, and the policy has its own page:
+
+<img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/administrators.png" width="800" alt="Administrators grid with the 2FA column">
+
+<img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/administrator-card.png" width="445" alt="Two-factor authentication card on the administrator page">
+
+<img src="https://raw.githubusercontent.com/calmfoxpl/sylius-admin-two-factor-plugin/main/docs/images/policy.png" width="800" alt="Two-factor authentication policy page">
+
 ## Requirements
 
 | | Version |

@@ -12,12 +12,18 @@
         "security"
     ],
     "license": "MIT",
+    "homepage": "https://github.com/calmfoxpl/sylius-admin-two-factor-plugin",
     "authors": [
         {
             "name": "Calmfox",
             "homepage": "https://calmfox.pl"
         }
     ],
+    "support": {
+        "issues": "https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/issues",
+        "source": "https://github.com/calmfoxpl/sylius-admin-two-factor-plugin",
+        "security": "https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/security/advisories/new"
+    },
     "require": {
         "php": "^8.2",
         "bacon/bacon-qr-code": "^3.0",
@@ -27,7 +33,7 @@
         "sylius/sylius": "^2.1"
     },
     "require-dev": {
-        "calmfox/sylius-admin-invitation-plugin": "^1.0@dev",
+        "calmfox/sylius-admin-invitation-plugin": "^1.0",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-doctrine": "^2.0",
