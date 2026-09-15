@@ -1,0 +1,16 @@
+{# Twig Hooks drop null values from the context, hence the defaults #}
+{% set context = hookable_metadata.context %}
+{% set authenticationError = context.authenticationError|default(null) %}
+{% set provider = context.twoFactorProvider|default('totp') %}
+
+{% if authenticationError %}
+    <div class="alert alert-danger" role="alert">
+        {{ authenticationError|trans(context.authenticationErrorData|default({}), 'SchebTwoFactorBundle') }}
+    </div>
+{% endif %}
+
+{% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/provider/' ~ (provider == 'passkey' ? 'passkey' : 'totp') ~ '.html.twig' %}
+
+<div class="text-center text-secondary mt-3">
+    <a href="{{ context.logoutPath }}">{{ 'calmfox_admin_two_factor.ui.cancel_and_log_out'|trans }}</a>
+</div>

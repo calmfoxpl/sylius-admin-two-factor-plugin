@@ -1,0 +1,62 @@
+calmfox_admin_two_factor:
+    ui:
+        two_factor: 2FA
+        code: Kod weryfikacyjny
+        verify: Zweryfikuj
+        login_title: Weryfikacja dwuetapowa
+        login_lead: Wpisz 6-cyfrowy kod z aplikacji uwierzytelniającej.
+        cancel_and_log_out: Anuluj i wyloguj
+        setup_title: Włącz weryfikację dwuetapową
+        setup_lead: Po haśle panel poprosi o drugi składnik. Wybierz, czym chcesz się potwierdzać. To zajmie minutę.
+        step_install: Zainstaluj aplikację uwierzytelniającą, np. Google Authenticator, Microsoft Authenticator, 1Password albo Aegis.
+        step_scan: Zeskanuj ten kod QR w aplikacji.
+        qr_alt: Kod QR dla aplikacji uwierzytelniającej
+        cant_scan: Nie możesz zeskanować kodu?
+        enter_key_manually: 'Dodaj w aplikacji konto %account% i wpisz ten klucz:'
+        step_code: Wpisz 6-cyfrowy kod, który pokazuje aplikacja.
+        enable: Włącz i przejdź dalej
+        log_out: Wyloguj
+        login_lead_passkey: Potwierdź, że to Ty, kluczem dostępu - odciskiem palca, twarzą albo PIN-em urządzenia.
+        passkey_title: Klucz dostępu
+        recommended: Zalecane
+        passkey_setup_lead: Najprościej i najbezpieczniej - odcisk palca, twarz albo PIN tego urządzenia. Nie da się go wyłudzić fałszywą stroną i nie trzeba nic przepisywać.
+        passkey_use: Użyj klucza dostępu
+        passkey_waiting: Czekam na urządzenie…
+        passkey_unsupported: Ta przeglądarka nie obsługuje kluczy dostępu. Wpisz kod z aplikacji uwierzytelniającej.
+        or_authenticator_app: albo aplikacja uwierzytelniająca
+        prefer_code: Wolę przepisać kod z aplikacji
+        use_passkey_instead: Użyj klucza dostępu
+        two_factor_title: Weryfikacja dwuetapowa
+        authenticator_app: Aplikacja uwierzytelniająca
+        passkey_title_plural: Klucze dostępu
+        paired: sparowana
+        not_paired: brak
+        added: dodany
+        last_used: ostatnio użyty
+        status: Stan
+        pairing_pending: wymaga sparowania
+        pairing_pending_long: przy następnym logowaniu sparuje nowe urządzenie
+        policy_disabled_note: Weryfikacja dwuetapowa jest wyłączona dla całego panelu. Sparowane metody zostają, ale nie są wymagane.
+        enable_now: Włącz 2FA
+        not_now: Nie teraz
+        method_totp: aplikacja
+        method_passkeys: 'klucze: %number%'
+    manage:
+        reset: Zresetuj 2FA
+        disable: Wyłącz 2FA
+        reset_confirm: 'Zresetować weryfikację dwuetapową dla %email%? Aplikacja i klucze dostępu zostaną usunięte, a przy następnym logowaniu trzeba będzie sparować nowe urządzenie.'
+        disable_confirm: 'Wyłączyć weryfikację dwuetapową dla %email%? Aplikacja i klucze dostępu zostaną usunięte. Jeśli polityka wymaga 2FA, przy następnym logowaniu i tak pojawi się parowanie.'
+        hint: 'Zresetuj: przy zgubionym lub nowym telefonie, parowanie od nowa przy następnym logowaniu. Wyłącz: usuwa sparowane metody, dalej decyduje polityka.'
+    settings:
+        title: Weryfikacja dwuetapowa
+        policy: Polityka
+        policy_required: Wymagana dla wszystkich administratorów
+        policy_required_help: Każdy administrator musi sparować klucz dostępu albo aplikację. Bez tego trafia tylko na ekran konfiguracji.
+        policy_required_short: wymagana
+        policy_optional: Dobrowolna
+        policy_optional_help: Administratorzy sami decydują, czy ją włączyć. Pytamy o nią tych, którzy sparowali metodę albo mieli zresetowane 2FA.
+        policy_optional_short: dobrowolna
+        policy_disabled: Wyłączona
+        policy_disabled_help: Nikt nie jest pytany o drugi składnik. Sparowane metody zostają na kontach i zadziałają znowu po zmianie polityki.
+        policy_disabled_short: wyłączona
+        help: To jedyne globalne ustawienie 2FA. Reset i wyłączenie dla pojedynczego administratora są na jego karcie w Administratorach.

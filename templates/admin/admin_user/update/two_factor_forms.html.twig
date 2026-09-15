@@ -1,0 +1,8 @@
+{% set adminUser = hookable_metadata.context.resource %}
+
+{% for operation in ['reset', 'disable'] %}
+    <form id="calmfox-admin-two-factor-{{ operation }}" action="{{ path('calmfox_admin_two_factor_manage', {id: adminUser.id, operation: operation}) }}" method="post" hidden>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token(calmfox_two_factor_csrf_id(operation, adminUser.id)) }}">
+        <input type="hidden" name="_redirect" value="{{ app.request.requestUri }}">
+    </form>
+{% endfor %}

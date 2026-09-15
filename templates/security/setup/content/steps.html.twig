@@ -1,0 +1,24 @@
+{% set context = hookable_metadata.context %}
+
+<div class="calmfox-two-factor-choice calmfox-two-factor-choice--totp">
+    <ol class="ps-3 mb-3">
+        <li class="mb-2">{{ 'calmfox_admin_two_factor.ui.step_install'|trans }}</li>
+        <li class="mb-2">{{ 'calmfox_admin_two_factor.ui.step_scan'|trans }}</li>
+    </ol>
+
+    <div class="text-center mb-3">
+        <img src="{{ context.qrCode }}" alt="{{ 'calmfox_admin_two_factor.ui.qr_alt'|trans }}" width="220" height="220" class="border rounded p-2 bg-white">
+    </div>
+
+    <details class="mb-3">
+        <summary class="text-secondary">{{ 'calmfox_admin_two_factor.ui.cant_scan'|trans }}</summary>
+        <div class="mt-2">
+            <div class="form-hint mb-1">{{ 'calmfox_admin_two_factor.ui.enter_key_manually'|trans({'%account%': context.adminUser.email}) }}</div>
+            <code class="d-block p-2 text-center fs-3 user-select-all">{{ context.secret }}</code>
+        </div>
+    </details>
+
+    <ol class="ps-3 mb-2" start="3">
+        <li>{{ 'calmfox_admin_two_factor.ui.step_code'|trans }}</li>
+    </ol>
+</div>

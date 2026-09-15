@@ -1,0 +1,17 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+{% set form = hookable_metadata.context.form %}
+
+{% form_theme form '@SyliusAdmin/shared/form_theme.html.twig' %}
+
+{{ form_start(form, {'action': path('calmfox_admin_two_factor_setup'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+    {{ form_row(form.code, {attr: form.code.vars.attr|merge({class: 'form-control-lg text-center font-monospace'})}) }}
+    {{ button.primary({ text: 'calmfox_admin_two_factor.ui.enable'|trans, type: 'submit', class: 'btn btn-primary w-100' }) }}
+{{ form_end(form, {'render_rest': true}) }}
+
+<div class="text-center text-secondary mt-3">
+    {% if hookable_metadata.context.mandatory|default(true) %}
+        <a href="{{ path('sylius_admin_logout') }}">{{ 'calmfox_admin_two_factor.ui.log_out'|trans }}</a>
+    {% else %}
+        <a href="{{ path('sylius_admin_dashboard') }}">{{ 'calmfox_admin_two_factor.ui.not_now'|trans }}</a>
+    {% endif %}
+</div>

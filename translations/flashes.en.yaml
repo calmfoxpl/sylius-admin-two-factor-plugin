@@ -1,0 +1,9 @@
+calmfox_admin_two_factor:
+    setup:
+        enabled: Two-factor authentication is on. From now on you will be asked for a code when you log in.
+        passkey_added: Your passkey is added. From now on you will confirm logging in with it.
+    manage:
+        reset_done: 'Two-factor authentication reset for %email%. They will pair a new device at their next login.'
+        disable_done: 'Two-factor authentication turned off for %email%.'
+    settings:
+        saved: The two-factor policy has been saved.

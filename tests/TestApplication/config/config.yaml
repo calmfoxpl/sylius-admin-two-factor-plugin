@@ -1,0 +1,38 @@
+imports:
+    - { resource: '@CalmfoxSyliusAdminInvitationPlugin/config/config.yaml' }
+    - { resource: '@CalmfoxSyliusAdminTwoFactorPlugin/config/config.yaml' }
+
+sylius_mailer:
+    sender:
+        name: Test shop
+        address: shop@example.com
+
+doctrine:
+    orm:
+        mappings:
+            TestApplication:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/../../../tests/TestApplication/Entity'
+                prefix: 'Tests\Calmfox\SyliusAdminTwoFactorPlugin\TestApplication\Entity'
+
+sylius_user:
+    resources:
+        admin:
+            user:
+                classes:
+                    model: Tests\Calmfox\SyliusAdminTwoFactorPlugin\TestApplication\Entity\AdminUser
+
+scheb_two_factor:
+    totp:
+        issuer: Test shop
+
+# the test application's security.yaml defines the admin firewall; this adds two-factor to it
+security:
+    firewalls:
+        admin:
+            two_factor:
+                auth_form_path: calmfox_admin_two_factor_login
+                check_path: calmfox_admin_two_factor_login_check
+                default_target_path: sylius_admin_dashboard
+                enable_csrf: true

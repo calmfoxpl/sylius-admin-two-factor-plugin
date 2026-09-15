@@ -1,0 +1,62 @@
+calmfox_admin_two_factor:
+    ui:
+        two_factor: 2FA
+        code: Authentication code
+        verify: Verify
+        login_title: Two-factor authentication
+        login_lead: Enter the 6-digit code from your authenticator app.
+        cancel_and_log_out: Cancel and log out
+        setup_title: Set up two-factor authentication
+        setup_lead: After the password the panel asks for a second factor. Choose how you want to confirm it's you. This takes a minute.
+        step_install: Install an authenticator app, e.g. Google Authenticator, Microsoft Authenticator, 1Password or Aegis.
+        step_scan: Scan this QR code with the app.
+        qr_alt: QR code for your authenticator app
+        cant_scan: Can't scan the code?
+        enter_key_manually: 'Add the account %account% in the app and enter this key:'
+        step_code: Enter the 6-digit code the app shows.
+        enable: Turn on and continue
+        log_out: Log out
+        login_lead_passkey: Confirm it's you with your passkey - fingerprint, face or device PIN.
+        passkey_title: Passkey
+        recommended: Recommended
+        passkey_setup_lead: The easiest and safest way - your fingerprint, face or the PIN of this device. It cannot be phished and there is nothing to retype.
+        passkey_use: Use a passkey
+        passkey_waiting: Waiting for your device…
+        passkey_unsupported: This browser cannot use passkeys. Enter the code from your authenticator app instead.
+        or_authenticator_app: or an authenticator app
+        prefer_code: I'd rather type a code from the app
+        use_passkey_instead: Use a passkey instead
+        two_factor_title: Two-factor authentication
+        authenticator_app: Authenticator app
+        passkey_title_plural: Passkeys
+        paired: paired
+        not_paired: not paired
+        added: added
+        last_used: last used
+        status: Status
+        pairing_pending: pairing required
+        pairing_pending_long: will pair a new device at next login
+        policy_disabled_note: Two-factor authentication is turned off for the whole panel. Paired methods are kept but not asked for.
+        enable_now: Turn on 2FA
+        not_now: Not now
+        method_totp: app
+        method_passkeys: 'passkeys: %number%'
+    manage:
+        reset: Reset 2FA
+        disable: Turn off 2FA
+        reset_confirm: 'Reset two-factor authentication for %email%? Their authenticator app and passkeys will be removed and they will have to pair a new device at their next login.'
+        disable_confirm: 'Turn off two-factor authentication for %email%? Their authenticator app and passkeys will be removed. If the policy requires 2FA, they will still be asked to pair at their next login.'
+        hint: 'Reset: for a lost or new phone, they pair again at next login. Turn off: removes the paired methods; the policy decides what happens next.'
+    settings:
+        title: Two-factor authentication
+        policy: Policy
+        policy_required: Required for all administrators
+        policy_required_help: Every administrator must pair a passkey or an authenticator app. Without it they only reach the setup page.
+        policy_required_short: required
+        policy_optional: Optional
+        policy_optional_help: Administrators decide themselves whether to turn it on. Those who paired a method, or whose 2FA was reset, are asked for it.
+        policy_optional_short: optional
+        policy_disabled: Turned off
+        policy_disabled_help: Nobody is asked for a second factor. Paired methods stay on the accounts and work again once the policy is changed.
+        policy_disabled_short: turned off
+        help: This is the only shop-wide 2FA setting. Resetting or turning off 2FA for a single administrator is done on their page in Administrators.

@@ -1,0 +1,9 @@
+calmfox_admin_two_factor:
+    code:
+        not_blank: Wpisz kod z aplikacji uwierzytelniającej.
+        invalid: Kod ma 6 cyfr.
+        wrong: Ten kod jest nieprawidłowy. Sprawdź czas w telefonie i wpisz aktualny kod.
+    passkey:
+        challenge_gone: Żądanie wygasło. Spróbuj ponownie.
+        rejected: Nie udało się potwierdzić odpowiedzi urządzenia. Spróbuj ponownie.
+        already_paired: Ten klucz dostępu jest już dodany do Twojego konta.

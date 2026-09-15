@@ -1,0 +1,10 @@
+{% if context.displayTrustedOption|default(false) %}
+    <label class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="{{ context.trustedParameterName }}">
+        <span class="form-check-label">{{ 'trusted'|trans({}, 'SchebTwoFactorBundle') }}</span>
+    </label>
+{% endif %}
+
+{% if context.isCsrfProtectionEnabled|default(false) %}
+    <input type="hidden" name="{{ context.csrfParameterName }}" value="{{ csrf_token(context.csrfTokenId) }}">
+{% endif %}

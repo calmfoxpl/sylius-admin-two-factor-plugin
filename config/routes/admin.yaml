@@ -1,0 +1,51 @@
+# Two-factor login form and check path: point the admin firewall's `two_factor` at these.
+# Access while 2FA is in progress is granted by RouteAccessMap.
+calmfox_admin_two_factor_login:
+    path: /2fa
+    methods: [GET]
+    defaults:
+        _controller: scheb_two_factor.form_controller::form
+
+calmfox_admin_two_factor_login_check:
+    path: /2fa_check
+    methods: [POST]
+
+# the second factor with a passkey: challenge while two-factor authentication is in progress
+calmfox_admin_two_factor_passkey_login_options:
+    path: /2fa/passkey/options
+    methods: [POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.passkey_login_options
+
+calmfox_admin_two_factor_passkey_registration_options:
+    path: /two-factor/passkey/options
+    methods: [POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.passkey_registration_options
+
+calmfox_admin_two_factor_passkey_register:
+    path: /two-factor/passkey
+    methods: [POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.passkey_register
+
+calmfox_admin_two_factor_setup:
+    path: /two-factor/setup
+    methods: [GET, POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.setup
+
+# reset or disable another administrator's 2FA (grid and edit page)
+calmfox_admin_two_factor_manage:
+    path: /users/{id}/two-factor/{operation}
+    methods: [POST]
+    requirements:
+        operation: reset|disable
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.manage
+
+calmfox_admin_two_factor_settings:
+    path: /two-factor/settings
+    methods: [GET, POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.settings

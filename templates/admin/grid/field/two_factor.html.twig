@@ -1,0 +1,15 @@
+{% set methods = [] %}
+{% if data.totpAuthenticationEnabled is defined and data.totpAuthenticationEnabled %}
+    {% set methods = methods|merge(['calmfox_admin_two_factor.ui.method_totp'|trans]) %}
+{% endif %}
+{% if data.passkeyCredentials is defined and data.passkeyCredentials|length > 0 %}
+    {% set methods = methods|merge(['calmfox_admin_two_factor.ui.method_passkeys'|trans({'%number%': data.passkeyCredentials|length})]) %}
+{% endif %}
+
+{% if methods is not empty %}
+    <span class="text-nowrap" title="{{ methods|join(', ') }}">{{ ux_icon('tabler:shield-check', {class: 'icon text-success'}) }} {{ methods|join(', ') }}</span>
+{% elseif data.twoFactorSetupRequired is defined and data.twoFactorSetupRequired %}
+    <span class="text-nowrap text-warning">{{ ux_icon('tabler:shield-exclamation', {class: 'icon'}) }} {{ 'calmfox_admin_two_factor.ui.pairing_pending'|trans }}</span>
+{% else %}
+    <span class="text-secondary">{{ ux_icon('tabler:x', {class: 'icon'}) }}</span>
+{% endif %}

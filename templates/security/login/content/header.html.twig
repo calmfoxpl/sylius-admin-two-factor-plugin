@@ -1,0 +1,6 @@
+{% set passkey = hookable_metadata.context.twoFactorProvider|default('') == 'passkey' %}
+
+<h2 class="h2 text-center mb-2">{{ 'calmfox_admin_two_factor.ui.login_title'|trans }}</h2>
+<p class="text-center text-secondary mb-4">
+    {{ (passkey ? 'calmfox_admin_two_factor.ui.login_lead_passkey' : 'calmfox_admin_two_factor.ui.login_lead')|trans }}
+</p>

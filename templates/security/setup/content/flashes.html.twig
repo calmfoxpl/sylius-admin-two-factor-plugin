@@ -1,0 +1,7 @@
+{% for type in ['success', 'info', 'error'] %}
+    {% for flash in app.session.flashbag.get(type) %}
+        <div class="alert alert-{{ type == 'error' ? 'danger' : type }}" role="alert">
+            {{ (flash is iterable ? flash.message : flash)|trans(flash is iterable ? flash.parameters : {}, 'flashes') }}
+        </div>
+    {% endfor %}
+{% endfor %}

@@ -1,0 +1,9 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}{{ parent() }} | {{ 'calmfox_admin_two_factor.ui.setup_title'|trans }}{% endblock %}
+
+{% block body_class %}d-flex flex-column{% endblock %}
+
+{% block body %}
+    {% hook 'calmfox_admin_two_factor.setup' with { form, qrCode, secret, adminUser, passkeysEnabled, mandatory } %}
+{% endblock %}

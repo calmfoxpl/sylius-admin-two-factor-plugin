@@ -1,0 +1,22 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}{{ parent() }} | {{ 'calmfox_admin_two_factor.ui.login_title'|trans }}{% endblock %}
+
+{% block body_class %}d-flex flex-column{% endblock %}
+
+{% block body %}
+    {% hook 'calmfox_admin_two_factor.login' with {
+        twoFactorProvider,
+        availableTwoFactorProviders,
+        authenticationError,
+        authenticationErrorData,
+        checkPathUrl: checkPathUrl ?: path(checkPathRoute),
+        authCodeParameterName,
+        displayTrustedOption,
+        trustedParameterName,
+        isCsrfProtectionEnabled,
+        csrfParameterName,
+        csrfTokenId,
+        logoutPath,
+    } %}
+{% endblock %}

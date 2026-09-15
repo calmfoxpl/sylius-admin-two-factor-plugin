@@ -1,0 +1,178 @@
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    # the code form and its passkey challenge are reachable while two-factor authentication is in progress
+    calmfox_admin_two_factor.security.access_map:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Security\RouteAccessMap
+        decorates: security.access_map
+        arguments:
+            $decorated: '@.inner'
+            $attributesByRoute:
+                calmfox_admin_two_factor_login: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
+                calmfox_admin_two_factor_login_check: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
+                calmfox_admin_two_factor_passkey_login_options: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
+
+    calmfox_admin_two_factor.qr_code_renderer:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Totp\QrCodeRenderer
+
+    calmfox_admin_two_factor.passkey.ceremony:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Passkey\PasskeyCeremony
+        arguments:
+            $rpName: '%calmfox_sylius_admin_two_factor.passkeys.rp_name%'
+            $rpId: '%calmfox_sylius_admin_two_factor.passkeys.rp_id%'
+
+    calmfox_admin_two_factor.passkey.form_renderer:
+        class: Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer
+        arguments:
+            - '@twig'
+            - '@@CalmfoxSyliusAdminTwoFactorPlugin/security/login.html.twig'
+
+    calmfox_admin_two_factor.passkey.provider:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Passkey\PasskeyTwoFactorProvider
+        arguments:
+            $ceremony: '@calmfox_admin_two_factor.passkey.ceremony'
+            $requestStack: '@request_stack'
+            $adminUserManager: '@sylius.manager.admin_user'
+            $formRenderer: '@calmfox_admin_two_factor.passkey.form_renderer'
+        tags:
+            - { name: scheb_two_factor.provider, alias: passkey }
+
+    calmfox_admin_two_factor.passkey.csrf_guard:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Passkey\JsonCsrfGuard
+        arguments: ['@security.csrf.token_manager']
+
+    calmfox_admin_two_factor.controller.passkey_registration_options:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Passkey\RegistrationOptionsAction
+        public: true
+        arguments:
+            $security: '@security.helper'
+            $ceremony: '@calmfox_admin_two_factor.passkey.ceremony'
+            $csrfGuard: '@calmfox_admin_two_factor.passkey.csrf_guard'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.controller.passkey_register:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Passkey\RegisterAction
+        public: true
+        arguments:
+            $security: '@security.helper'
+            $ceremony: '@calmfox_admin_two_factor.passkey.ceremony'
+            $csrfGuard: '@calmfox_admin_two_factor.passkey.csrf_guard'
+            $adminUserManager: '@sylius.manager.admin_user'
+            $urlGenerator: '@router'
+            $translator: '@translator'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.controller.passkey_login_options:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Passkey\LoginOptionsAction
+        public: true
+        arguments:
+            $tokenStorage: '@security.token_storage'
+            $ceremony: '@calmfox_admin_two_factor.passkey.ceremony'
+            $csrfGuard: '@calmfox_admin_two_factor.passkey.csrf_guard'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.form.type.setup:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Form\Type\TwoFactorSetupType
+        tags: ['form.type']
+
+    calmfox_admin_two_factor.controller.setup:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\SetupAction
+        public: true
+        arguments:
+            $security: '@security.helper'
+            $totpAuthenticator: '@scheb_two_factor.security.totp_authenticator'
+            $qrCodeRenderer: '@calmfox_admin_two_factor.qr_code_renderer'
+            $adminUserManager: '@sylius.manager.admin_user'
+            $formFactory: '@form.factory'
+            $urlGenerator: '@router'
+            $translator: '@translator'
+            $twig: '@twig'
+            $policy: '@calmfox_admin_two_factor.policy'
+            $passkeysEnabled: '%calmfox_sylius_admin_two_factor.passkeys.enabled%'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.policy:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Policy\TwoFactorPolicy
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $defaultPolicy: '%calmfox_sylius_admin_two_factor.default_policy%'
+
+    Calmfox\SyliusAdminTwoFactorPlugin\Policy\TwoFactorPolicy:
+        alias: calmfox_admin_two_factor.policy
+
+    calmfox_admin_two_factor.totp.form_renderer:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Totp\AdminTotpFormRenderer
+        decorates: scheb_two_factor.security.totp.form_renderer
+        arguments:
+            $inner: '@.inner'
+            $tokenStorage: '@security.token_storage'
+            $twig: '@twig'
+            $template: '@@CalmfoxSyliusAdminTwoFactorPlugin/security/login.html.twig'
+
+    calmfox_admin_two_factor.condition:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Policy\TwoFactorCondition
+        arguments: ['@calmfox_admin_two_factor.policy']
+
+    calmfox_admin_two_factor.twig_extension:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Twig\TwoFactorExtension
+        arguments: ['@calmfox_admin_two_factor.policy']
+        tags: ['twig.extension']
+
+    calmfox_admin_two_factor.menu_listener:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Menu\AdminMenuListener
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main }
+
+    calmfox_admin_two_factor.form.type.settings:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Form\Type\TwoFactorSettingsType
+        tags: ['form.type']
+
+    calmfox_admin_two_factor.controller.settings:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\SettingsAction
+        public: true
+        arguments:
+            $policy: '@calmfox_admin_two_factor.policy'
+            $formFactory: '@form.factory'
+            $urlGenerator: '@router'
+            $twig: '@twig'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.controller.manage:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\ManageAction
+        public: true
+        arguments:
+            $adminUserRepository: '@sylius.repository.admin_user'
+            $adminUserManager: '@sylius.manager.admin_user'
+            $csrfTokenManager: '@security.csrf.token_manager'
+            $urlGenerator: '@router'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.listener.enforce_setup:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\EventListener\EnforceTwoFactorSetupListener
+        arguments:
+            $tokenStorage: '@security.token_storage'
+            $firewallMap: '@security.firewall.map'
+            $urlGenerator: '@router'
+            $policy: '@calmfox_admin_two_factor.policy'
+            $firewallName: '%calmfox_sylius_admin_two_factor.firewall%'
+        tags:
+            # after the firewall (8) has loaded the token
+            - { name: kernel.event_listener, event: kernel.request, priority: 0 }
+
+    calmfox_admin_two_factor.listener.invitation_accepted:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\EventListener\InvitationAcceptedListener
+        arguments:
+            $urlGenerator: '@router'
+            $policy: '@calmfox_admin_two_factor.policy'
+        tags:
+            - { name: kernel.event_listener, event: calmfox_admin_invitation.invitation_accepted }
+
+    calmfox_admin_two_factor.command.reset:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Command\ResetTwoFactorCommand
+        arguments:
+            $adminUserRepository: '@sylius.repository.admin_user'
+            $adminUserManager: '@sylius.manager.admin_user'
+        tags: ['console.command']

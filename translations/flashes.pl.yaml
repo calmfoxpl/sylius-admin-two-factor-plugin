@@ -1,0 +1,9 @@
+calmfox_admin_two_factor:
+    setup:
+        enabled: Weryfikacja dwuetapowa jest włączona. Od teraz przy logowaniu zapytamy o kod z aplikacji.
+        passkey_added: Klucz dostępu jest dodany. Od teraz logowanie potwierdzisz nim zamiast kodu.
+    manage:
+        reset_done: 'Zresetowano weryfikację dwuetapową dla %email%. Przy następnym logowaniu sparuje nowe urządzenie.'
+        disable_done: 'Wyłączono weryfikację dwuetapową dla %email%.'
+    settings:
+        saved: Polityka weryfikacji dwuetapowej została zapisana.

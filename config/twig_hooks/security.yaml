@@ -1,0 +1,92 @@
+sylius_twig_hooks:
+    hooks:
+        # two-factor code at login
+        'calmfox_admin_two_factor.login':
+            page:
+                template: '@SyliusAdmin/security/common/page.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.login.page':
+            logo:
+                template: '@SyliusAdmin/security/common/logo.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/security/common/content.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.login.page.logo':
+            image:
+                template: '@SyliusAdmin/security/common/logo/image.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.login.page.content':
+            header:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/header.html.twig'
+                priority: 100
+            form:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/form.html.twig'
+                priority: 0
+
+        # pairing an authenticator app
+        'calmfox_admin_two_factor.setup':
+            page:
+                template: '@SyliusAdmin/security/common/page.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.setup.page':
+            logo:
+                template: '@SyliusAdmin/security/common/logo.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/security/common/content.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.setup.page.logo':
+            image:
+                template: '@SyliusAdmin/security/common/logo/image.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.setup.page.content':
+            flashes:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/flashes.html.twig'
+                priority: 400
+            header:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/header.html.twig'
+                priority: 300
+            passkey:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/passkey.html.twig'
+                priority: 250
+            steps:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/steps.html.twig'
+                priority: 200
+            form:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/form.html.twig'
+                priority: 0
+
+        # administrator edit page: 2FA card and its forms outside the edit form
+        'sylius_admin.admin_user.update.content.form.sections#right':
+            calmfox_two_factor:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/admin_user/update/two_factor_card.html.twig'
+                priority: -200
+        'sylius_admin.admin_user.update.content':
+            calmfox_two_factor_forms:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/admin_user/update/two_factor_forms.html.twig'
+                priority: -200
+
+        # Configuration → Two-factor authentication (rendered with prefixes [calmfox_admin_two_factor.settings, sylius_admin.common])
+        'calmfox_admin_two_factor.settings.create.content.header':
+            breadcrumbs:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/settings/breadcrumbs.html.twig'
+                priority: 100
+        'calmfox_admin_two_factor.settings.create.content.header.title_block':
+            title:
+                template: '@SyliusAdmin/shared/crud/create/content/header/title_block/title.html.twig'
+                configuration:
+                    header: 'calmfox_admin_two_factor.settings.title'
+                priority: 100
+        'calmfox_admin_two_factor.settings.create.content.header.title_block.actions':
+            cancel:
+                enabled: false
+            create:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/settings/save_action.html.twig'
+                priority: 0
+        'calmfox_admin_two_factor.settings.create.content.form.sections.general':
+            default:
+                enabled: false
+            policy:
+                template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/settings/policy.html.twig'
+                priority: 0

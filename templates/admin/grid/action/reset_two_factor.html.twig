@@ -1,0 +1,9 @@
+{# Reset: removes paired methods and makes the administrator pair again at next login. #}
+<form action="{{ path('calmfox_admin_two_factor_manage', {id: data.id, operation: 'reset'}) }}" method="post" class="d-inline"
+      onsubmit="return confirm({{ 'calmfox_admin_two_factor.manage.reset_confirm'|trans({'%email%': data.email})|json_encode }});">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token(calmfox_two_factor_csrf_id('reset', data.id)) }}">
+    <input type="hidden" name="_redirect" value="{{ app.request.requestUri }}">
+    <button class="btn btn-icon" type="submit" data-bs-toggle="tooltip" data-bs-title="{{ action.label|trans }}" aria-label="{{ action.label|trans }}">
+        {{ ux_icon(action.icon|default('tabler:shield-x')) }}
+    </button>
+</form>

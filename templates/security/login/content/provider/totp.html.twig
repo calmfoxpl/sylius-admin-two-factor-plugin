@@ -1,0 +1,19 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+<form action="{{ context.checkPathUrl }}" method="post" class="ui large loadable form" novalidate>
+    <div class="mb-3">
+        <label class="form-label required" for="_auth_code">{{ 'calmfox_admin_two_factor.ui.code'|trans }}</label>
+        <input id="_auth_code" type="text" name="{{ context.authCodeParameterName }}" class="form-control form-control-lg text-center font-monospace"
+               autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autofocus required>
+    </div>
+
+    {% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/provider/_hidden_fields.html.twig' %}
+
+    {{ button.primary({ text: 'calmfox_admin_two_factor.ui.verify'|trans, type: 'submit', class: 'btn btn-primary w-100' }) }}
+</form>
+
+{% if 'passkey' in context.availableTwoFactorProviders|default([]) %}
+    <div class="text-center mt-3">
+        <a href="{{ path('calmfox_admin_two_factor_login', {preferProvider: 'passkey'}) }}">{{ 'calmfox_admin_two_factor.ui.use_passkey_instead'|trans }}</a>
+    </div>
+{% endif %}

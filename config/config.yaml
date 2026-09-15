@@ -1,0 +1,32 @@
+imports:
+    - { resource: 'twig_hooks/*.yaml' }
+
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
+    totp:
+        enabled: true
+
+sylius_grid:
+    templates:
+        action:
+            calmfox_two_factor_reset: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/grid/action/reset_two_factor.html.twig'
+    grids:
+        sylius_admin_admin_user:
+            fields:
+                twoFactor:
+                    type: twig
+                    label: calmfox_admin_two_factor.ui.two_factor
+                    path: .
+                    options:
+                        template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/grid/field/two_factor.html.twig'
+                        vars:
+                            th_class: "w-1 text-center"
+                            td_class: "text-center"
+            actions:
+                item:
+                    reset_two_factor:
+                        type: calmfox_two_factor_reset
+                        label: calmfox_admin_two_factor.manage.reset
+                        icon: tabler:shield-x
