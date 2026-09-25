@@ -41,17 +41,39 @@ calmfox_admin_two_factor:
         not_now: Nie teraz
         method_totp: aplikacja
         method_passkeys: 'klucze: %number%'
+        method_email: kod e-mail
+        login_lead_email: Wpisz 6-cyfrowy kod, który wysłaliśmy na Twój adres e-mail.
+        login_lead_email_waiting: Potwierdź, że to Ty, kodem wysyłanym na e-mail.
+        email_code: Kod z wiadomości e-mail
+        email_sent_to: 'Wysłany na %email%. Kod jest ważny %minutes% min.'
+        email_resend: Wyślij nowy kod
+        use_email_instead: Wyślij mi kod na e-mail
+        or_email: albo kod na e-mail
+        email_setup_lead: 'Nie masz aplikacji w telefonie? Przy logowaniu wyślemy 6-cyfrowy kod na %email%.'
+        email_weaker: 'Słabsze od klucza dostępu i aplikacji: kto przejmie tę skrzynkę, może zresetować hasło i odebrać także kod.'
+        email_start: Wyślij mi kod
+        email_confirm: Potwierdź i włącz
+        email_code_title: Kod na e-mail
+        turned_on: włączony
+        turned_off: wyłączony
     manage:
         reset: Zresetuj 2FA
         disable: Wyłącz 2FA
-        reset_confirm: 'Zresetować weryfikację dwuetapową dla %email%? Aplikacja i klucze dostępu zostaną usunięte, a przy następnym logowaniu trzeba będzie sparować nowe urządzenie.'
-        disable_confirm: 'Wyłączyć weryfikację dwuetapową dla %email%? Aplikacja i klucze dostępu zostaną usunięte. Jeśli polityka wymaga 2FA, przy następnym logowaniu i tak pojawi się parowanie.'
+        reset_confirm: 'Zresetować weryfikację dwuetapową dla %email%? Wszystkie metody (aplikacja, klucze dostępu, kody na e-mail) zostaną usunięte, a przy następnym logowaniu trzeba będzie ustawić jedną od nowa.'
+        disable_confirm: 'Wyłączyć weryfikację dwuetapową dla %email%? Wszystkie metody (aplikacja, klucze dostępu, kody na e-mail) zostaną usunięte. Jeśli polityka wymaga 2FA, przy następnym logowaniu i tak pojawi się konfiguracja.'
         hint: 'Zresetuj: przy zgubionym lub nowym telefonie, parowanie od nowa przy następnym logowaniu. Wyłącz: usuwa sparowane metody, dalej decyduje polityka.'
+    email_message:
+        subject: Twój kod do panelu administracyjnego
+        heading: Twój kod
+        lead_login: Wpisz ten kod, aby dokończyć logowanie do panelu administracyjnego.
+        lead_setup: Wpisz ten kod, aby włączyć kody logowania na e-mail.
+        valid: 'Kod jest ważny %minutes% min i działa jeden raz.'
+        not_you: Jeśli to nie Ty logujesz się teraz, ktoś zna Twoje hasło. Zmień je od razu.
     settings:
         title: Weryfikacja dwuetapowa
         policy: Polityka
         policy_required: Wymagana dla wszystkich administratorów
-        policy_required_help: Każdy administrator musi sparować klucz dostępu albo aplikację. Bez tego trafia tylko na ekran konfiguracji.
+        policy_required_help: Każdy administrator musi ustawić klucz dostępu, aplikację albo kody na e-mail. Bez tego trafia tylko na ekran konfiguracji.
         policy_required_short: wymagana
         policy_optional: Dobrowolna
         policy_optional_help: Administratorzy sami decydują, czy ją włączyć. Pytamy o nią tych, którzy sparowali metodę albo mieli zresetowane 2FA.

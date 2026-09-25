@@ -15,7 +15,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * An administrator who must use two-factor authentication (policy "required", or their 2FA was
- * reset) can only reach the setup page and log out until they pair a passkey or an app.
+ * reset) can only reach the setup page and log out until they pair a passkey or an app, or turn on
+ * e-mail codes.
  */
 final readonly class EnforceTwoFactorSetupListener
 {
@@ -23,6 +24,7 @@ final readonly class EnforceTwoFactorSetupListener
         'calmfox_admin_two_factor_setup',
         'calmfox_admin_two_factor_passkey_registration_options',
         'calmfox_admin_two_factor_passkey_register',
+        'calmfox_admin_two_factor_email_setup',
         'sylius_admin_logout',
         'sylius_admin_login',
         'sylius_admin_login_check',

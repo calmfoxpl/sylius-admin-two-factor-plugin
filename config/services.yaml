@@ -4,7 +4,7 @@ services:
         autoconfigure: false
         public: false
 
-    # the code form and its passkey challenge are reachable while two-factor authentication is in progress
+    # the code form, its passkey challenge and e-mail resend are reachable while two-factor authentication is in progress
     calmfox_admin_two_factor.security.access_map:
         class: Calmfox\SyliusAdminTwoFactorPlugin\Security\RouteAccessMap
         decorates: security.access_map
@@ -14,6 +14,7 @@ services:
                 calmfox_admin_two_factor_login: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
                 calmfox_admin_two_factor_login_check: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
                 calmfox_admin_two_factor_passkey_login_options: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
+                calmfox_admin_two_factor_email_resend: ['IS_AUTHENTICATED_2FA_IN_PROGRESS']
 
     calmfox_admin_two_factor.qr_code_renderer:
         class: Calmfox\SyliusAdminTwoFactorPlugin\Totp\QrCodeRenderer
@@ -74,6 +75,56 @@ services:
             $csrfGuard: '@calmfox_admin_two_factor.passkey.csrf_guard'
         tags: ['controller.service_arguments']
 
+    calmfox_admin_two_factor.email.mailer:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCodeMailer
+        arguments: ['@sylius.email_sender']
+
+    calmfox_admin_two_factor.email.code:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCode
+        arguments:
+            $requestStack: '@request_stack'
+            $mailer: '@calmfox_admin_two_factor.email.mailer'
+            $lifetime: '%calmfox_sylius_admin_two_factor.email.code_lifetime%'
+            $resendInterval: '%calmfox_sylius_admin_two_factor.email.resend_interval%'
+            $logger: '@?logger'
+
+    calmfox_admin_two_factor.email.form_renderer:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCodeFormRenderer
+        arguments:
+            $inner: '@calmfox_admin_two_factor.passkey.form_renderer'
+            $tokenStorage: '@security.token_storage'
+            $emailCode: '@calmfox_admin_two_factor.email.code'
+
+    calmfox_admin_two_factor.email.provider:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCodeTwoFactorProvider
+        arguments:
+            $emailCode: '@calmfox_admin_two_factor.email.code'
+            $formRenderer: '@calmfox_admin_two_factor.email.form_renderer'
+        tags:
+            - { name: scheb_two_factor.provider, alias: admin_email }
+
+    calmfox_admin_two_factor.controller.email_resend:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Email\ResendLoginCodeAction
+        public: true
+        arguments:
+            $tokenStorage: '@security.token_storage'
+            $emailCode: '@calmfox_admin_two_factor.email.code'
+            $csrfTokenManager: '@security.csrf.token_manager'
+            $urlGenerator: '@router'
+        tags: ['controller.service_arguments']
+
+    calmfox_admin_two_factor.controller.email_setup:
+        class: Calmfox\SyliusAdminTwoFactorPlugin\Controller\Email\SetupEmailCodeAction
+        public: true
+        arguments:
+            $security: '@security.helper'
+            $emailCode: '@calmfox_admin_two_factor.email.code'
+            $adminUserManager: '@sylius.manager.admin_user'
+            $policy: '@calmfox_admin_two_factor.policy'
+            $csrfTokenManager: '@security.csrf.token_manager'
+            $urlGenerator: '@router'
+        tags: ['controller.service_arguments']
+
     calmfox_admin_two_factor.form.type.setup:
         class: Calmfox\SyliusAdminTwoFactorPlugin\Form\Type\TwoFactorSetupType
         tags: ['form.type']
@@ -92,6 +143,8 @@ services:
             $twig: '@twig'
             $policy: '@calmfox_admin_two_factor.policy'
             $passkeysEnabled: '%calmfox_sylius_admin_two_factor.passkeys.enabled%'
+            $emailCode: '@calmfox_admin_two_factor.email.code'
+            $emailEnabled: '%calmfox_sylius_admin_two_factor.email.enabled%'
         tags: ['controller.service_arguments']
 
     calmfox_admin_two_factor.policy:

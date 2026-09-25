@@ -1,0 +1,37 @@
+{#
+    One-time code for the administrator. Variables: adminUser, code, purpose ('login' or
+    'setup'), validMinutes, localeCode.
+
+    Each part is a block, so an application can restyle only what it needs, e.g. in
+    templates/bundles/CalmfoxSyliusAdminTwoFactorPlugin/email/code.html.twig:
+
+        {% extends '@!CalmfoxSyliusAdminTwoFactorPlugin/email/code.html.twig' %}
+        {% block heading %}…{% endblock %}
+#}
+{% extends '@CalmfoxSyliusAdminTwoFactorPlugin/email/layout.html.twig' %}
+
+{% block subject %}
+    {{ 'calmfox_admin_two_factor.email_message.subject'|trans({}, null, localeCode)|raw }}
+{% endblock %}
+
+{% block content %}
+    {% block heading %}
+        <div style="text-align: center; font-size: 24px; margin-bottom: 20px;">{{ 'calmfox_admin_two_factor.email_message.heading'|trans({}, null, localeCode) }}</div>
+    {% endblock %}
+
+    {% block lead %}
+        <p style="text-align: center; margin: 0 0 20px 0;">{{ ('calmfox_admin_two_factor.email_message.lead_' ~ (purpose == 'setup' ? 'setup' : 'login'))|trans({}, null, localeCode) }}</p>
+    {% endblock %}
+
+    {% block code %}
+        <div style="text-align: center; font-family: 'Courier New', monospace; font-size: 32px; letter-spacing: 6px; font-weight: bold; margin: 0 0 20px 0;">{{ code }}</div>
+    {% endblock %}
+
+    {% block details %}
+        <p style="text-align: center; margin: 0; font-size: 14px; color: #777;">
+            {{ 'calmfox_admin_two_factor.email_message.valid'|trans({'%minutes%': validMinutes}, null, localeCode) }}<br>
+            {# the code is only sent after a correct password, so an unexpected one means the password is known #}
+            {% if purpose != 'setup' %}{{ 'calmfox_admin_two_factor.email_message.not_you'|trans({}, null, localeCode) }}{% endif %}
+        </p>
+    {% endblock %}
+{% endblock %}

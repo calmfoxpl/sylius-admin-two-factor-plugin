@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Calmfox\SyliusAdminTwoFactorPlugin\Model;
 
+use Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCodeTwoFactorProvider;
 use Calmfox\SyliusAdminTwoFactorPlugin\Passkey\PasskeyTwoFactorProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 
 /**
- * Use in your AdminUser entity together with TwoFactorAdminUserInterface. Adds three columns:
+ * Use in your AdminUser entity together with TwoFactorAdminUserInterface. Adds four columns:
  * the TOTP secret, the list of passkeys (public keys only — the private key never
- * leaves the administrator's device) and the
+ * leaves the administrator's device), the e-mail code switch and the
  * "pair again at next login" flag.
  */
 trait TwoFactorAdminUserTrait
@@ -23,6 +24,9 @@ trait TwoFactorAdminUserTrait
     /** @var list<array{id: string, name: string, publicKey: string, signCount: int, createdAt: string, lastUsedAt: string|null}>|null */
     #[ORM\Column(name: 'passkey_credentials', type: 'json', nullable: true)]
     protected ?array $passkeyCredentials = null;
+
+    #[ORM\Column(name: 'email_code_enabled', type: 'boolean', options: ['default' => false])]
+    protected bool $emailCodeEnabled = false;
 
     #[ORM\Column(name: 'two_factor_setup_required', type: 'boolean', options: ['default' => false])]
     protected bool $twoFactorSetupRequired = false;
@@ -80,14 +84,39 @@ trait TwoFactorAdminUserTrait
         return [] !== $this->getPasskeyCredentials();
     }
 
-    public function hasTwoFactorAuthentication(): bool
+    public function isEmailCodeEnabled(): bool
     {
-        return $this->isTotpAuthenticationEnabled() || $this->hasPasskeys();
+        return $this->emailCodeEnabled;
     }
 
-    /** A passkey is one gesture instead of retyping six digits, so it goes first when both exist. */
+    public function setEmailCodeEnabled(bool $emailCodeEnabled): void
+    {
+        $this->emailCodeEnabled = $emailCodeEnabled;
+    }
+
+    public function hasTwoFactorAuthentication(): bool
+    {
+        return $this->isTotpAuthenticationEnabled() || $this->hasPasskeys() || $this->emailCodeEnabled;
+    }
+
+    public function clearTwoFactorAuthentication(): void
+    {
+        $this->totpSecret = null;
+        $this->passkeyCredentials = null;
+        $this->emailCodeEnabled = false;
+    }
+
+    /**
+     * A passkey is one gesture, an app code is at hand at once, and an e-mail means waiting for
+     * the message, so that is the order offered at login. The others stay one click away.
+     */
     public function getPreferredTwoFactorProvider(): ?string
     {
-        return $this->hasPasskeys() ? PasskeyTwoFactorProvider::ALIAS : null;
+        return match (true) {
+            $this->hasPasskeys() => PasskeyTwoFactorProvider::ALIAS,
+            $this->isTotpAuthenticationEnabled() => 'totp',
+            $this->emailCodeEnabled => EmailCodeTwoFactorProvider::ALIAS,
+            default => null,
+        };
     }
 }

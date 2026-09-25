@@ -5,6 +5,21 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-25
+
+### Added
+
+- A code sent by e-mail as a third method, for administrators who cannot use a passkey or an authenticator app. It is turned on from the setup page after typing back a first code, and at login it comes after a passkey and the app, which stay one click away.
+- E-mail codes are kept in the session as a hash, bound to the administrator, valid for 10 minutes, burnt after 5 wrong tries and limited to one new code a minute. A failing mail server is reported on the page.
+- `email` options: `enabled`, `code_lifetime`, `resend_interval`.
+
+### Changed
+
+- `TwoFactorAdminUserInterface` has `isEmailCodeEnabled()`, `setEmailCodeEnabled()` and `clearTwoFactorAuthentication()`, all provided by `TwoFactorAdminUserTrait`. The trait adds the column `email_code_enabled`, so generate and run a migration.
+- *Reset 2FA*, *Turn off 2FA* and `calmfox:admin:2fa:reset` remove e-mail codes too; the administrator card and the grid column show them.
+- The login page lists all of an administrator's other methods below the current one.
+- The setup page's *Log out* / *Not now* link moved from the `form` hook to a new `footer` hook.
+
 ## [1.0.0] - 2026-09-15
 
 ### Added
@@ -18,5 +33,6 @@ All notable changes to this project are documented in this file. The format foll
 - Access to the 2FA pages granted by route name; the policy condition and the admin form renderer apply to administrators only.
 - English and Polish translations.
 
-[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/releases/tag/v1.0.0

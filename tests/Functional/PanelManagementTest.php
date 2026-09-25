@@ -29,6 +29,8 @@ final class PanelManagementTest extends FunctionalTestCase
     public function testResetRemovesTheMethodsAndRequiresANewPairing(): void
     {
         $target = $this->createAdmin(self::TOTP_SECRET);
+        $target->setEmailCodeEnabled(true);
+        $this->entityManager()->flush();
         $this->client->loginUser($this->createAdmin(self::TOTP_SECRET), 'admin');
 
         $crawler = $this->client->request('GET', '/admin/users/' . self::id($target) . '/edit');

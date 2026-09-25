@@ -6,6 +6,7 @@
 {% set policy = calmfox_two_factor_policy() %}
 {% set passkeys = adminUser.passkeyCredentials|default([]) %}
 {% set hasApp = adminUser.totpAuthenticationEnabled|default(false) %}
+{% set hasEmail = adminUser.emailCodeEnabled|default(false) %}
 {% set isMe = app.user is not null and app.user.id == adminUser.id %}
 
 <div class="card mb-3">
@@ -40,6 +41,9 @@
                     {{ 'calmfox_admin_two_factor.ui.not_paired'|trans }}
                 {% endfor %}
             </dd>
+
+            <dt class="col-5">{{ 'calmfox_admin_two_factor.ui.email_code_title'|trans }}</dt>
+            <dd class="col-7">{{ (hasEmail ? 'calmfox_admin_two_factor.ui.turned_on' : 'calmfox_admin_two_factor.ui.turned_off')|trans }}</dd>
 
             {% if adminUser.twoFactorSetupRequired|default(false) %}
                 <dt class="col-5">{{ 'calmfox_admin_two_factor.ui.status'|trans }}</dt>

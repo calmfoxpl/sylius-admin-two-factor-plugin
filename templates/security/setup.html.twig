@@ -5,5 +5,5 @@
 {% block body_class %}d-flex flex-column{% endblock %}
 
 {% block body %}
-    {% hook 'calmfox_admin_two_factor.setup' with { form, qrCode, secret, adminUser, passkeysEnabled, mandatory } %}
+    {% hook 'calmfox_admin_two_factor.setup' with { form, qrCode, secret, adminUser, passkeysEnabled, mandatory, email } %}
 {% endblock %}

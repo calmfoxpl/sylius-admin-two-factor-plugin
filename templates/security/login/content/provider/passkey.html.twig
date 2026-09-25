@@ -18,12 +18,6 @@
     </form>
 </div>
 
-{% if 'totp' in context.availableTwoFactorProviders|default([]) %}
-    <div class="text-center mt-3">
-        <a href="{{ path('calmfox_admin_two_factor_login', {preferProvider: 'totp'}) }}">{{ 'calmfox_admin_two_factor.ui.prefer_code'|trans }}</a>
-    </div>
-{% endif %}
-
 <script>
     (() => {
         const root = document.querySelector('[data-calmfox-passkey-login]');

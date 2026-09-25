@@ -11,9 +11,3 @@
 
     {{ button.primary({ text: 'calmfox_admin_two_factor.ui.verify'|trans, type: 'submit', class: 'btn btn-primary w-100' }) }}
 </form>
-
-{% if 'passkey' in context.availableTwoFactorProviders|default([]) %}
-    <div class="text-center mt-3">
-        <a href="{{ path('calmfox_admin_two_factor_login', {preferProvider: 'passkey'}) }}">{{ 'calmfox_admin_two_factor.ui.use_passkey_instead'|trans }}</a>
-    </div>
-{% endif %}

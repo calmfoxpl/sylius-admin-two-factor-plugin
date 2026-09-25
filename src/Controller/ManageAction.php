@@ -20,9 +20,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 /**
  * Another administrator's two-factor authentication, from the grid or the edit page:
  *
- *  - reset: removes the paired app and passkeys and makes them pair again at next login,
- *    whatever the policy — for a lost or replaced phone,
- *  - disable: removes the paired app and passkeys; with the policy "required" they will still
+ *  - reset: removes every method (app, passkeys, e-mail codes) and makes them pair again at
+ *    next login, whatever the policy — for a lost or replaced phone,
+ *  - disable: removes every method; with the policy "required" they will still
  *    be asked to pair at next login, with "optional" they simply log in with the password.
  */
 final readonly class ManageAction
@@ -55,8 +55,7 @@ final readonly class ManageAction
             throw new NotFoundHttpException();
         }
 
-        $adminUser->setTotpSecret(null);
-        $adminUser->setPasskeyCredentials([]);
+        $adminUser->clearTwoFactorAuthentication();
         $adminUser->setTwoFactorSetupRequired(self::RESET === $operation);
         $this->adminUserManager->flush();
 

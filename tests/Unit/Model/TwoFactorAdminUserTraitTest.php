@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Calmfox\SyliusAdminTwoFactorPlugin\Unit\Model;
 
+use Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCodeTwoFactorProvider;
 use Calmfox\SyliusAdminTwoFactorPlugin\Passkey\PasskeyTwoFactorProvider;
 use PHPUnit\Framework\TestCase;
 use Tests\Calmfox\SyliusAdminTwoFactorPlugin\TestApplication\Entity\AdminUser;
@@ -52,5 +53,37 @@ final class TwoFactorAdminUserTraitTest extends TestCase
 
         self::assertSame([], $adminUser->getPasskeyCredentials());
         self::assertFalse($adminUser->hasPasskeys());
+    }
+
+    public function testEmailCodesAloneCountAsASecondFactor(): void
+    {
+        $adminUser = new AdminUser();
+        $adminUser->setEmailCodeEnabled(true);
+
+        self::assertTrue($adminUser->hasTwoFactorAuthentication());
+        self::assertSame(EmailCodeTwoFactorProvider::ALIAS, $adminUser->getPreferredTwoFactorProvider());
+    }
+
+    public function testTheAppIsOfferedBeforeWaitingForAnEmail(): void
+    {
+        $adminUser = new AdminUser();
+        $adminUser->setEmailCodeEnabled(true);
+        $adminUser->setTotpSecret('JBSWY3DPEHPK3PXP');
+
+        self::assertSame('totp', $adminUser->getPreferredTwoFactorProvider());
+    }
+
+    public function testClearingRemovesEveryMethod(): void
+    {
+        $adminUser = new AdminUser();
+        $adminUser->setTotpSecret('JBSWY3DPEHPK3PXP');
+        $adminUser->setPasskeyCredentials([['id' => 'a', 'name' => 'Laptop', 'publicKey' => 'pem', 'signCount' => 0, 'createdAt' => '2026-01-01T00:00:00+00:00', 'lastUsedAt' => null]]);
+        $adminUser->setEmailCodeEnabled(true);
+
+        $adminUser->clearTwoFactorAuthentication();
+
+        self::assertFalse($adminUser->hasTwoFactorAuthentication());
+        self::assertFalse($adminUser->isEmailCodeEnabled());
+        self::assertNull($adminUser->getPreferredTwoFactorProvider());
     }
 }

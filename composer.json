@@ -1,14 +1,17 @@
 {
     "name": "calmfox/sylius-admin-two-factor-plugin",
     "type": "sylius-plugin",
-    "description": "Two-factor authentication for Sylius administrators: passkeys or an authenticator app (TOTP), with enforced setup and integration with calmfox/sylius-admin-invitation-plugin.",
+    "description": "Two-factor authentication for Sylius administrators: passkeys, an authenticator app (TOTP) or a code sent by e-mail, with enforced setup and integration with calmfox/sylius-admin-invitation-plugin.",
     "keywords": [
         "sylius",
         "sylius-plugin",
         "admin",
         "2fa",
         "two-factor",
+        "passkey",
+        "webauthn",
         "totp",
+        "email",
         "security"
     ],
     "license": "MIT",
@@ -86,7 +89,7 @@
             "require": "^7.4"
         },
         "branch-alias": {
-            "dev-main": "1.0-dev"
+            "dev-main": "1.1-dev"
         },
         "public-dir": "vendor/sylius/test-application/public"
     },

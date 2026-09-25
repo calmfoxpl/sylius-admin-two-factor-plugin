@@ -1,0 +1,34 @@
+{#
+    Code sent by e-mail. The form renderer has already sent it (or tried to) before this page
+    was drawn, so what it says here is what happened.
+#}
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+{% set email = context.emailCode|default({}) %}
+
+{% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/setup/content/flashes.html.twig' %}
+
+{% if email.sendFailed|default(false) %}
+    <div class="alert alert-danger" role="alert">{{ 'calmfox_admin_two_factor.email.send_failed'|trans({}, 'flashes') }}</div>
+{% elseif email.burnt|default(false) %}
+    <div class="alert alert-warning" role="alert">{{ 'calmfox_admin_two_factor.email.burnt'|trans({}, 'flashes') }}</div>
+{% endif %}
+
+<form action="{{ context.checkPathUrl }}" method="post" class="ui large loadable form" novalidate>
+    <div class="mb-3">
+        <label class="form-label required" for="_auth_code">{{ 'calmfox_admin_two_factor.ui.email_code'|trans }}</label>
+        <input id="_auth_code" type="text" name="{{ context.authCodeParameterName }}" class="form-control form-control-lg text-center font-monospace"
+               autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autofocus required>
+        {% if email.pending|default(false) %}
+            <div class="form-hint mt-1">{{ 'calmfox_admin_two_factor.ui.email_sent_to'|trans({'%email%': email.recipient, '%minutes%': email.validMinutes}) }}</div>
+        {% endif %}
+    </div>
+
+    {% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/provider/_hidden_fields.html.twig' %}
+
+    {{ button.primary({ text: 'calmfox_admin_two_factor.ui.verify'|trans, type: 'submit', class: 'btn btn-primary w-100' }) }}
+</form>
+
+<form action="{{ path('calmfox_admin_two_factor_email_resend') }}" method="post" class="text-center mt-2">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('calmfox_admin_two_factor_email_resend') }}">
+    <button type="submit" class="btn btn-link">{{ 'calmfox_admin_two_factor.ui.email_resend'|trans }}</button>
+</form>

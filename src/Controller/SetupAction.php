@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Calmfox\SyliusAdminTwoFactorPlugin\Controller;
 
+use Calmfox\SyliusAdminTwoFactorPlugin\Email\EmailCode;
 use Calmfox\SyliusAdminTwoFactorPlugin\Form\Type\TwoFactorSetupType;
 use Calmfox\SyliusAdminTwoFactorPlugin\Model\TwoFactorAdminUserInterface;
 use Calmfox\SyliusAdminTwoFactorPlugin\Policy\TwoFactorPolicy;
@@ -26,7 +27,8 @@ use Twig\Environment;
 /**
  * Pairs the logged-in administrator with an authenticator app. The secret waits in the
  * session and lands on the account only after the administrator types a valid code, so a
- * half-finished setup never locks anyone out.
+ * half-finished setup never locks anyone out. The page also offers passkeys and codes by
+ * e-mail, which are turned on by their own actions.
  */
 final readonly class SetupAction
 {
@@ -43,6 +45,8 @@ final readonly class SetupAction
         private Environment $twig,
         private TwoFactorPolicy $policy,
         private bool $passkeysEnabled = true,
+        private ?EmailCode $emailCode = null,
+        private bool $emailEnabled = false,
     ) {
     }
 
@@ -99,6 +103,10 @@ final readonly class SetupAction
                 'adminUser' => $adminUser,
                 'passkeysEnabled' => $this->passkeysEnabled,
                 'mandatory' => $this->policy->mustSetUp($adminUser),
+                'email' => $this->emailEnabled && null !== $this->emailCode ? [
+                    'recipient' => EmailCode::maskedRecipient($adminUser),
+                    'pending' => $this->emailCode->isPending($adminUser, EmailCode::SETUP),
+                ] : false,
             ]),
             $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK,
         );

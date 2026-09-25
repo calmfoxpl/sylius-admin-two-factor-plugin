@@ -1,0 +1,25 @@
+{#
+    The frame of the plugin's e-mail, in the look of Sylius' own admin e-mails.
+
+    To send it in your shop's mail layout instead, override this file in your application
+    (templates/bundles/CalmfoxSyliusAdminTwoFactorPlugin/email/layout.html.twig) with just:
+
+        {% extends '@SyliusCore/Email/layout.html.twig' %}
+#}
+{% extends '@SyliusCore/Email/layout.html.twig' %}
+
+{% block body %}
+    {% autoescape false %}
+        <div style="font-family: sans-serif; background: #eee; padding-top: 30px; padding-bottom: 30px; font-size: 16px; color: #333; line-height: 1.5">
+            <div style="max-width: 600px; margin: 20px auto;">
+                <div style="margin-bottom: 30px; text-align: center;">
+                    <img src="{{ absolute_url(asset('bundles/syliusui/images/logo.png')) }}" alt="Sylius" style="width: 170px">
+                </div>
+
+                <div style="background: #fff; padding: 40px 30px;">
+                    {{ block('content') }}
+                </div>
+            </div>
+        </div>
+    {% endautoescape %}
+{% endblock %}

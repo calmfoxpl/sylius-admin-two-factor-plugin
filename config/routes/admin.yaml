@@ -17,6 +17,13 @@ calmfox_admin_two_factor_passkey_login_options:
     defaults:
         _controller: calmfox_admin_two_factor.controller.passkey_login_options
 
+# a new e-mail code while two-factor authentication is in progress
+calmfox_admin_two_factor_email_resend:
+    path: /2fa/email/resend
+    methods: [POST]
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.email_resend
+
 calmfox_admin_two_factor_passkey_registration_options:
     path: /two-factor/passkey/options
     methods: [POST]
@@ -34,6 +41,15 @@ calmfox_admin_two_factor_setup:
     methods: [GET, POST]
     defaults:
         _controller: calmfox_admin_two_factor.controller.setup
+
+# turning on e-mail codes from the setup page: send a code, then type it back
+calmfox_admin_two_factor_email_setup:
+    path: /two-factor/email/{operation}
+    methods: [POST]
+    requirements:
+        operation: start|confirm
+    defaults:
+        _controller: calmfox_admin_two_factor.controller.email_setup
 
 # reset or disable another administrator's 2FA (grid and edit page)
 calmfox_admin_two_factor_manage:

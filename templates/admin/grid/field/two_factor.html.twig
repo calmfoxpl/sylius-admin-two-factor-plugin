@@ -5,6 +5,9 @@
 {% if data.passkeyCredentials is defined and data.passkeyCredentials|length > 0 %}
     {% set methods = methods|merge(['calmfox_admin_two_factor.ui.method_passkeys'|trans({'%number%': data.passkeyCredentials|length})]) %}
 {% endif %}
+{% if data.emailCodeEnabled is defined and data.emailCodeEnabled %}
+    {% set methods = methods|merge(['calmfox_admin_two_factor.ui.method_email'|trans]) %}
+{% endif %}
 
 {% if methods is not empty %}
     <span class="text-nowrap" title="{{ methods|join(', ') }}">{{ ux_icon('tabler:shield-check', {class: 'icon text-success'}) }} {{ methods|join(', ') }}</span>

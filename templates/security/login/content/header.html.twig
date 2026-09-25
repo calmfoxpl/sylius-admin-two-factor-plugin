@@ -1,6 +1,13 @@
-{% set passkey = hookable_metadata.context.twoFactorProvider|default('') == 'passkey' %}
+{% set provider = hookable_metadata.context.twoFactorProvider|default('') %}
 
 <h2 class="h2 text-center mb-2">{{ 'calmfox_admin_two_factor.ui.login_title'|trans }}</h2>
 <p class="text-center text-secondary mb-4">
-    {{ (passkey ? 'calmfox_admin_two_factor.ui.login_lead_passkey' : 'calmfox_admin_two_factor.ui.login_lead')|trans }}
+    {% if provider == 'passkey' %}
+        {{ 'calmfox_admin_two_factor.ui.login_lead_passkey'|trans }}
+    {% elseif provider == 'admin_email' %}
+        {# "we sent" only when a code really is on its way, see EmailCodeFormRenderer #}
+        {{ (hookable_metadata.context.emailCode.pending|default(false) ? 'calmfox_admin_two_factor.ui.login_lead_email' : 'calmfox_admin_two_factor.ui.login_lead_email_waiting')|trans }}
+    {% else %}
+        {{ 'calmfox_admin_two_factor.ui.login_lead'|trans }}
+    {% endif %}
 </p>

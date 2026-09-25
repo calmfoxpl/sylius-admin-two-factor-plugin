@@ -41,17 +41,39 @@ calmfox_admin_two_factor:
         not_now: Not now
         method_totp: app
         method_passkeys: 'passkeys: %number%'
+        method_email: e-mail code
+        login_lead_email: Enter the 6-digit code we sent to your e-mail address.
+        login_lead_email_waiting: Confirm it's you with a code sent by e-mail.
+        email_code: Code from the e-mail
+        email_sent_to: 'Sent to %email%. The code is valid for %minutes% min.'
+        email_resend: Send a new code
+        use_email_instead: Send me a code by e-mail instead
+        or_email: or a code by e-mail
+        email_setup_lead: 'No phone app? At login we will send a 6-digit code to %email%.'
+        email_weaker: 'Weaker than a passkey or an app: whoever takes over this mailbox can reset your password and receive the code as well.'
+        email_start: Send me a code
+        email_confirm: Confirm and turn on
+        email_code_title: Code by e-mail
+        turned_on: turned on
+        turned_off: turned off
     manage:
         reset: Reset 2FA
         disable: Turn off 2FA
-        reset_confirm: 'Reset two-factor authentication for %email%? Their authenticator app and passkeys will be removed and they will have to pair a new device at their next login.'
-        disable_confirm: 'Turn off two-factor authentication for %email%? Their authenticator app and passkeys will be removed. If the policy requires 2FA, they will still be asked to pair at their next login.'
+        reset_confirm: 'Reset two-factor authentication for %email%? All their methods (app, passkeys, e-mail codes) will be removed and they will have to set one up again at their next login.'
+        disable_confirm: 'Turn off two-factor authentication for %email%? All their methods (app, passkeys, e-mail codes) will be removed. If the policy requires 2FA, they will still be asked to set one up at their next login.'
         hint: 'Reset: for a lost or new phone, they pair again at next login. Turn off: removes the paired methods; the policy decides what happens next.'
+    email_message:
+        subject: Your code for the administration panel
+        heading: Your code
+        lead_login: Enter this code to finish logging in to the administration panel.
+        lead_setup: Enter this code to turn on login codes by e-mail.
+        valid: 'The code is valid for %minutes% min and works once.'
+        not_you: If you are not logging in right now, someone knows your password. Change it straight away.
     settings:
         title: Two-factor authentication
         policy: Policy
         policy_required: Required for all administrators
-        policy_required_help: Every administrator must pair a passkey or an authenticator app. Without it they only reach the setup page.
+        policy_required_help: Every administrator must set up a passkey, an authenticator app or codes by e-mail. Without it they only reach the setup page.
         policy_required_short: required
         policy_optional: Optional
         policy_optional_help: Administrators decide themselves whether to turn it on. Those who paired a method, or whose 2FA was reset, are asked for it.

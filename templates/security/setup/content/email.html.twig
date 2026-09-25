@@ -1,0 +1,37 @@
+{#
+    Last choice: a code by e-mail, for administrators who cannot manage a phone app or a
+    passkey. It is turned on only after the administrator types back a code from the mailbox.
+#}
+{% set email = hookable_metadata.context.email|default(false) %}
+
+{% if email %}
+    <div class="calmfox-two-factor-choice calmfox-two-factor-choice--email" id="calmfox-two-factor-email">
+        <div class="hr-text my-4">{{ 'calmfox_admin_two_factor.ui.or_email'|trans }}</div>
+
+        <p class="text-secondary mb-2">{{ 'calmfox_admin_two_factor.ui.email_setup_lead'|trans({'%email%': email.recipient}) }}</p>
+        <p class="form-hint mb-3">{{ 'calmfox_admin_two_factor.ui.email_weaker'|trans }}</p>
+
+        {% if email.pending %}
+            <form action="{{ path('calmfox_admin_two_factor_email_setup', {operation: 'confirm'}) }}" method="post" class="mb-2" novalidate>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('calmfox_admin_two_factor_email_confirm') }}">
+                <div class="mb-3">
+                    <label class="form-label required" for="calmfox-two-factor-email-code">{{ 'calmfox_admin_two_factor.ui.email_code'|trans }}</label>
+                    <input id="calmfox-two-factor-email-code" type="text" name="code" class="form-control form-control-lg text-center font-monospace"
+                           autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autofocus required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">{{ 'calmfox_admin_two_factor.ui.email_confirm'|trans }}</button>
+            </form>
+        {% endif %}
+
+        <form action="{{ path('calmfox_admin_two_factor_email_setup', {operation: 'start'}) }}" method="post" class="text-center">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('calmfox_admin_two_factor_email_start') }}">
+            {% if email.pending %}
+                <button type="submit" class="btn btn-link">{{ 'calmfox_admin_two_factor.ui.email_resend'|trans }}</button>
+            {% else %}
+                <button type="submit" class="btn w-100">
+                    {{ ux_icon('tabler:mail', {class: 'icon'}) }} {{ 'calmfox_admin_two_factor.ui.email_start'|trans }}
+                </button>
+            {% endif %}
+        </form>
+    </div>
+{% endif %}

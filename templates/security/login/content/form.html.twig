@@ -2,6 +2,12 @@
 {% set context = hookable_metadata.context %}
 {% set authenticationError = context.authenticationError|default(null) %}
 {% set provider = context.twoFactorProvider|default('totp') %}
+{% set templates = {passkey: 'passkey', admin_email: 'email'} %}
+{% set labels = {
+    passkey: 'calmfox_admin_two_factor.ui.use_passkey_instead',
+    totp: 'calmfox_admin_two_factor.ui.prefer_code',
+    admin_email: 'calmfox_admin_two_factor.ui.use_email_instead',
+} %}
 
 {% if authenticationError %}
     <div class="alert alert-danger" role="alert">
@@ -9,7 +15,14 @@
     </div>
 {% endif %}
 
-{% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/provider/' ~ (provider == 'passkey' ? 'passkey' : 'totp') ~ '.html.twig' %}
+{% include '@CalmfoxSyliusAdminTwoFactorPlugin/security/login/content/provider/' ~ (templates[provider] ?? 'totp') ~ '.html.twig' %}
+
+{# the administrator's other methods, e.g. the phone is at home: fall back to an e-mail #}
+{% for other in context.availableTwoFactorProviders|default([])|filter(p => p != provider and labels[p] is defined) %}
+    <div class="text-center mt-3">
+        <a href="{{ path('calmfox_admin_two_factor_login', {preferProvider: other}) }}">{{ labels[other]|trans }}</a>
+    </div>
+{% endfor %}
 
 <div class="text-center text-secondary mt-3">
     <a href="{{ context.logoutPath }}">{{ 'calmfox_admin_two_factor.ui.cancel_and_log_out'|trans }}</a>

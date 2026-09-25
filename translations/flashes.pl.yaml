@@ -2,6 +2,14 @@ calmfox_admin_two_factor:
     setup:
         enabled: Weryfikacja dwuetapowa jest włączona. Od teraz przy logowaniu zapytamy o kod z aplikacji.
         passkey_added: Klucz dostępu jest dodany. Od teraz logowanie potwierdzisz nim zamiast kodu.
+        email_enabled: Kody na e-mail są włączone. Od teraz przy logowaniu wyślemy Ci kod na e-mail.
+    email:
+        code_sent: 'Wysłaliśmy kod na %email%. Wpisz go poniżej.'
+        code_resent: Wysłaliśmy nowy kod.
+        wait: 'Nowy kod możesz zamówić za %seconds% s.'
+        send_failed: Nie udało się wysłać wiadomości. Spróbuj za chwilę albo użyj innej metody, jeśli ją masz.
+        burnt: Za dużo błędnych kodów. Wyślij sobie nowy.
+        wrong_code: Ten kod jest nieprawidłowy albo wygasł.
     manage:
         reset_done: 'Zresetowano weryfikację dwuetapową dla %email%. Przy następnym logowaniu sparuje nowe urządzenie.'
         disable_done: 'Wyłączono weryfikację dwuetapową dla %email%.'

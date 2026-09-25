@@ -9,8 +9,9 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
 
 /**
- * An administrator's second factor: an authenticator app (TOTP), passkeys, or both.
- * Which one to set up — and which one to use at login — is the administrator's choice.
+ * An administrator's second factor: passkeys, an authenticator app (TOTP), a code sent by
+ * e-mail, or any mix of them. Which one to set up, and which one to use at login, is the
+ * administrator's choice.
  */
 interface TwoFactorAdminUserInterface extends AdminUserInterface, TwoFactorInterface, PreferredProviderInterface
 {
@@ -30,11 +31,19 @@ interface TwoFactorAdminUserInterface extends AdminUserInterface, TwoFactorInter
 
     public function hasPasskeys(): bool;
 
+    /** Codes sent to the account's e-mail address. The code itself is kept in the session, never on the account. */
+    public function isEmailCodeEnabled(): bool;
+
+    public function setEmailCodeEnabled(bool $emailCodeEnabled): void;
+
     /** Set when another administrator resets this one's 2FA: pair again at next login, whatever the policy. */
     public function isTwoFactorSetupRequired(): bool;
 
     public function setTwoFactorSetupRequired(bool $twoFactorSetupRequired): void;
 
-    /** True once the administrator has any second factor: an authenticator app or a passkey. */
+    /** True once the administrator has any second factor: a passkey, an authenticator app or e-mail codes. */
     public function hasTwoFactorAuthentication(): bool;
+
+    /** Removes every method: passkeys, the authenticator app and e-mail codes. */
+    public function clearTwoFactorAuthentication(): void;
 }

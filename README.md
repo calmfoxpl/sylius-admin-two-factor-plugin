@@ -3,17 +3,17 @@
 [![Build](https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Two-factor authentication for the Sylius 2 administration panel, built on [scheb/2fa-bundle](https://github.com/scheb/2fa). Each administrator chooses their second factor: a **passkey** (fingerprint, face or device PIN) or an **authenticator app** (TOTP).
+Two-factor authentication for the Sylius 2 administration panel, built on [scheb/2fa-bundle](https://github.com/scheb/2fa). Each administrator chooses their second factor: a **passkey** (fingerprint, face or device PIN), an **authenticator app** (TOTP) or a **code sent by e-mail**.
 
 ## Features
 
-- **Choice at setup:** a passkey is offered first, because it cannot be phished and there is nothing to retype. An authenticator app with a QR code or manual key comes next.
-- **At login:** after the password, a passkey takes one gesture and an app takes a 6-digit code. Administrators with both methods can switch between them.
+- **Choice at setup:** a passkey is offered first, because it cannot be phished and there is nothing to retype. An authenticator app with a QR code or manual key comes next. Last comes a code by e-mail, for administrators who cannot manage either; the page says plainly that it is the weaker option.
+- **At login:** after the password, a passkey takes one gesture, an app takes a 6-digit code and an e-mail brings one. Administrators with several methods can switch between them, e.g. to an e-mail when the phone is at home.
 - **Policy in the panel:** *Configuration → Two-factor authentication* has three settings:
   - **required:** administrators without a second factor can only reach the setup page,
   - **optional:** each administrator decides,
   - **turned off:** nobody is asked.
-- **Per administrator:** a card on the administrator's edit page lists the paired app and passkeys, with two separate actions:
+- **Per administrator:** a card on the administrator's edit page lists the paired app, passkeys and e-mail codes, with two separate actions:
   - **Reset 2FA:** removes the methods and requires a new pairing at the next login, whatever the policy. For a lost phone.
   - **Turn off 2FA:** removes the methods and leaves the rest to the policy.
 
@@ -27,7 +27,14 @@ Two-factor authentication for the Sylius 2 administration panel, built on [scheb
   - only public keys are stored.
 
   Built on [lbuchs/webauthn](https://github.com/lbuchs/WebAuthn), which has no dependencies.
-- **No security configuration beyond the firewall:** the 2FA pages are opened by route name. The policy condition, form renderer and passkey provider apply to administrators only, so the plugin runs next to other scheb/2fa setups, e.g. [calmfox/sylius-shop-two-factor-plugin](https://github.com/calmfoxpl/sylius-shop-two-factor-plugin).
+- **Careful e-mail codes:**
+  - turned on only after the administrator types back a first code, so a mistyped or dead mailbox cannot lock them out,
+  - the code is kept in the session as a hash, never on the account, and is bound to the administrator,
+  - it is valid for 10 minutes and works once; 5 wrong tries burn it,
+  - a new one can be requested once a minute, so the button cannot flood a mailbox,
+  - it goes out through the Sylius mailer with the shop's sender, in the administrator's panel language,
+  - when the mail server fails, the login page says so instead of showing an error.
+- **No security configuration beyond the firewall:** the 2FA pages are opened by route name. The policy condition, form renderer, passkey and e-mail providers apply to administrators only, so the plugin runs next to other scheb/2fa setups, e.g. [calmfox/sylius-shop-two-factor-plugin](https://github.com/calmfoxpl/sylius-shop-two-factor-plugin). E-mail codes use the plugin's own provider rather than scheb/2fa-email, which the shop plugin configures for customers.
 - **Invitations:** with [calmfox/sylius-admin-invitation-plugin](https://github.com/calmfoxpl/sylius-admin-invitation-plugin) installed, a new administrator pairs a second factor right after setting their password.
 - **Translations:** English and Polish.
 
@@ -129,7 +136,7 @@ Setup offers a passkey first and an authenticator app next; at login the adminis
                     enable_csrf: true
     ```
 
-7. Generate and run a migration. It adds the columns `totp_secret`, `passkey_credentials` and `two_factor_setup_required` to `sylius_admin_user`, and the table `calmfox_admin_two_factor_settings`:
+7. Generate and run a migration. It adds the columns `totp_secret`, `passkey_credentials`, `email_code_enabled` and `two_factor_setup_required` to `sylius_admin_user`, and the table `calmfox_admin_two_factor_settings`:
 
     ```bash
     bin/console doctrine:migrations:diff
@@ -148,7 +155,13 @@ calmfox_sylius_admin_two_factor:
         enabled: true
         rp_name: Sylius           # name the device shows when creating a passkey
         rp_id: ~                  # bare domain passkeys are bound to; null = request host. Changing it invalidates paired passkeys.
+    email:
+        enabled: true             # offer codes by e-mail
+        code_lifetime: 600        # seconds a code stays valid
+        resend_interval: 60       # seconds before another code can be requested
 ```
+
+E-mail codes are sent through the Sylius mailer, so `sylius_mailer.sender` (name and address) must be set, as it is for Sylius' own e-mails.
 
 Everything else (trusted devices, code leeway, window) is regular [scheb/2fa-bundle configuration](https://symfony.com/bundles/SchebTwoFactorBundle/current/configuration.html).
 
@@ -159,10 +172,11 @@ The pages reuse the Sylius admin login screen templates, logo included, so an ad
 - **Templates:** override them under `templates/bundles/CalmfoxSyliusAdminTwoFactorPlugin/`. To replace only some blocks, extend the original with `{% extends '@!CalmfoxSyliusAdminTwoFactorPlugin/…' %}`.
 - **Twig Hooks:**
   - `calmfox_admin_two_factor.login.page.content`: the code at login,
-  - `calmfox_admin_two_factor.setup.page.content` (`flashes`, `header`, `passkey`, `steps`, `form`): setup,
+  - `calmfox_admin_two_factor.setup.page.content` (`flashes`, `header`, `passkey`, `steps`, `form`, `email`, `footer`): setup,
   - `calmfox_admin_two_factor.settings.create.*`: the policy page,
   - `calmfox_two_factor` in `sylius_admin.admin_user.update.content.form.sections#right`: the administrator card.
-- **CSS:** the setup choices carry `calmfox-two-factor-choice--passkey` and `calmfox-two-factor-choice--totp`.
+- **CSS:** the setup choices carry `calmfox-two-factor-choice--passkey`, `calmfox-two-factor-choice--totp` and `calmfox-two-factor-choice--email`.
+- **E-mail:** `email/code.html.twig` is built from blocks (`heading`, `lead`, `code`, `details`) inside `email/layout.html.twig`, which frames it like Sylius' own admin e-mails. To send it in your shop's mail layout, override the layout with `{% extends '@SyliusCore/Email/layout.html.twig' %}`.
 
 ## Development
 

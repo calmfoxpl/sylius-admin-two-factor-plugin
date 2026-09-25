@@ -15,7 +15,7 @@ final class CalmfoxSyliusAdminTwoFactorExtension extends Extension implements Pr
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /** @var array{default_policy: string, firewall: string, passkeys: array{enabled: bool, rp_name: string, rp_id: string|null}} $config */
+        /** @var array{default_policy: string, firewall: string, passkeys: array{enabled: bool, rp_name: string, rp_id: string|null}, email: array{enabled: bool, code_lifetime: int, resend_interval: int}} $config */
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         $container->setParameter('calmfox_sylius_admin_two_factor.default_policy', $config['default_policy']);
@@ -23,6 +23,9 @@ final class CalmfoxSyliusAdminTwoFactorExtension extends Extension implements Pr
         $container->setParameter('calmfox_sylius_admin_two_factor.passkeys.enabled', $config['passkeys']['enabled']);
         $container->setParameter('calmfox_sylius_admin_two_factor.passkeys.rp_name', $config['passkeys']['rp_name']);
         $container->setParameter('calmfox_sylius_admin_two_factor.passkeys.rp_id', $config['passkeys']['rp_id']);
+        $container->setParameter('calmfox_sylius_admin_two_factor.email.enabled', $config['email']['enabled']);
+        $container->setParameter('calmfox_sylius_admin_two_factor.email.code_lifetime', $config['email']['code_lifetime']);
+        $container->setParameter('calmfox_sylius_admin_two_factor.email.resend_interval', $config['email']['resend_interval']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
@@ -34,6 +37,10 @@ final class CalmfoxSyliusAdminTwoFactorExtension extends Extension implements Pr
 
         if (!$config['passkeys']['enabled']) {
             $container->removeDefinition('calmfox_admin_two_factor.passkey.provider');
+        }
+
+        if (!$config['email']['enabled']) {
+            $container->removeDefinition('calmfox_admin_two_factor.email.provider');
         }
     }
 

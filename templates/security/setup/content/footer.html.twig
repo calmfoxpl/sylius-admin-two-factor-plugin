@@ -1,0 +1,7 @@
+<div class="text-center text-secondary mt-4">
+    {% if hookable_metadata.context.mandatory|default(true) %}
+        <a href="{{ path('sylius_admin_logout') }}">{{ 'calmfox_admin_two_factor.ui.log_out'|trans }}</a>
+    {% else %}
+        <a href="{{ path('sylius_admin_dashboard') }}">{{ 'calmfox_admin_two_factor.ui.not_now'|trans }}</a>
+    {% endif %}
+</div>

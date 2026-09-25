@@ -8,6 +8,12 @@ scheb_two_factor:
     totp:
         enabled: true
 
+sylius_mailer:
+    emails:
+        calmfox_admin_two_factor_code:
+            subject: calmfox_admin_two_factor.email_message.subject
+            template: '@CalmfoxSyliusAdminTwoFactorPlugin/email/code.html.twig'
+
 sylius_grid:
     templates:
         action:

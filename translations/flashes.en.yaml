@@ -2,6 +2,14 @@ calmfox_admin_two_factor:
     setup:
         enabled: Two-factor authentication is on. From now on you will be asked for a code when you log in.
         passkey_added: Your passkey is added. From now on you will confirm logging in with it.
+        email_enabled: Codes by e-mail are on. From now on you will receive a code by e-mail when you log in.
+    email:
+        code_sent: 'We sent a code to %email%. Enter it below.'
+        code_resent: We sent a new code.
+        wait: 'You can ask for a new code in %seconds% s.'
+        send_failed: The e-mail could not be sent. Try again in a moment, or use another method if you have one.
+        burnt: Too many wrong codes. Send yourself a new one.
+        wrong_code: This code is not correct or has expired.
     manage:
         reset_done: 'Two-factor authentication reset for %email%. They will pair a new device at their next login.'
         disable_done: 'Two-factor authentication turned off for %email%.'

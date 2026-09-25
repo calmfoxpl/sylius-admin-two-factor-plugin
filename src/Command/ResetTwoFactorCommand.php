@@ -51,8 +51,7 @@ final class ResetTwoFactorCommand extends Command
         }
 
         $disable = (bool) $input->getOption('disable');
-        $adminUser->setTotpSecret(null);
-        $adminUser->setPasskeyCredentials([]);
+        $adminUser->clearTwoFactorAuthentication();
         $adminUser->setTwoFactorSetupRequired(!$disable);
         $this->adminUserManager->flush();
 
