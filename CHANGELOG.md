@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-05
+
+### Changed
+
+- The policy page moved from Configuration to **Calmfox services → Two-factor authentication**, a group of the admin menu that every Calmfox plugin shares for the settings of its service.
+
 ## [1.1.0] - 2026-09-25
 
 ### Added
@@ -33,6 +39,7 @@ All notable changes to this project are documented in this file. The format foll
 - Access to the 2FA pages granted by route name; the policy condition and the admin form renderer apply to administrators only.
 - English and Polish translations.
 
-[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/releases/tag/v1.0.0

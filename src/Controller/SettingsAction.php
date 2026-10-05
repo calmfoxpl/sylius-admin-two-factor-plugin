@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-/** Configuration → Two-factor authentication: the only shop-wide 2FA setting is the policy. */
+/** Calmfox services → Two-factor authentication: the only shop-wide 2FA setting is the policy. */
 final readonly class SettingsAction
 {
     public function __construct(

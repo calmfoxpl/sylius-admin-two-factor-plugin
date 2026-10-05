@@ -82,3 +82,7 @@ calmfox_admin_two_factor:
         policy_disabled_help: Nikt nie jest pytany o drugi składnik. Sparowane metody zostają na kontach i zadziałają znowu po zmianie polityki.
         policy_disabled_short: wyłączona
         help: To jedyne globalne ustawienie 2FA. Reset i wyłączenie dla pojedynczego administratora są na jego karcie w Administratorach.
+
+calmfox:
+    menu:
+        section: Usługi Calmfox

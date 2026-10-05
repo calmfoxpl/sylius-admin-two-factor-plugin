@@ -73,7 +73,7 @@ sylius_twig_hooks:
                 template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/admin_user/update/two_factor_forms.html.twig'
                 priority: -200
 
-        # Configuration → Two-factor authentication (rendered with prefixes [calmfox_admin_two_factor.settings, sylius_admin.common])
+        # Calmfox services → Two-factor authentication (rendered with prefixes [calmfox_admin_two_factor.settings, sylius_admin.common])
         'calmfox_admin_two_factor.settings.create.content.header':
             breadcrumbs:
                 template: '@CalmfoxSyliusAdminTwoFactorPlugin/admin/settings/breadcrumbs.html.twig'

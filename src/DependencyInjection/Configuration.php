@@ -17,7 +17,7 @@ final class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->enumNode('default_policy')
-                    ->info('Policy until someone sets it in the panel (Configuration → Two-factor authentication).')
+                    ->info('Policy until someone sets it in the panel (Calmfox services → Two-factor authentication).')
                     ->values(TwoFactorPolicy::ALL)
                     ->defaultValue(TwoFactorPolicy::REQUIRED)
                 ->end()

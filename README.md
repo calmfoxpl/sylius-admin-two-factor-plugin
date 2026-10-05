@@ -9,7 +9,7 @@ Two-factor authentication for the Sylius 2 administration panel, built on [scheb
 
 - **Choice at setup:** a passkey is offered first, because it cannot be phished and there is nothing to retype. An authenticator app with a QR code or manual key comes next. Last comes a code by e-mail, for administrators who cannot manage either; the page says plainly that it is the weaker option.
 - **At login:** after the password, a passkey takes one gesture, an app takes a 6-digit code and an e-mail brings one. Administrators with several methods can switch between them, e.g. to an e-mail when the phone is at home.
-- **Policy in the panel:** *Configuration → Two-factor authentication* has three settings:
+- **Policy in the panel:** *Calmfox services → Two-factor authentication* has three settings:
   - **required:** administrators without a second factor can only reach the setup page,
   - **optional:** each administrator decides,
   - **turned off:** nobody is asked.

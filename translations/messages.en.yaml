@@ -82,3 +82,7 @@ calmfox_admin_two_factor:
         policy_disabled_help: Nobody is asked for a second factor. Paired methods stay on the accounts and work again once the policy is changed.
         policy_disabled_short: turned off
         help: This is the only shop-wide 2FA setting. Resetting or turning off 2FA for a single administrator is done on their page in Administrators.
+
+calmfox:
+    menu:
+        section: Calmfox services
