@@ -81,8 +81,10 @@ sylius_twig_hooks:
         'calmfox_admin_two_factor.settings.create.content.header.title_block':
             title:
                 template: '@SyliusAdmin/shared/crud/create/content/header/title_block/title.html.twig'
+                # resource_name too: Sylius before 2.2.9 reads it unconditionally on a page with no resource.
                 configuration:
                     header: 'calmfox_admin_two_factor.settings.title'
+                    resource_name: 'calmfox_admin_two_factor.settings.title'
                 priority: 100
         'calmfox_admin_two_factor.settings.create.content.header.title_block.actions':
             cancel:
