@@ -67,11 +67,25 @@ final readonly class ManageAction
             ]);
         }
 
+        return new RedirectResponse($this->redirectTarget($request));
+    }
+
+    /**
+     * Back where the button was (list or edit page). The form carries the page's full address:
+     * behind a proxy that mounts the shop under a prefix (`X-Forwarded-Prefix`), a bare path
+     * would lose that prefix and land on whatever else lives at the root of the domain.
+     * Only this site is a valid target, never another one.
+     */
+    private function redirectTarget(Request $request): string
+    {
         $target = (string) $request->request->get('_redirect');
 
-        return new RedirectResponse(str_starts_with($target, '/') && !str_starts_with($target, '//')
+        $local = str_starts_with($target, '/') && !str_starts_with($target, '//');
+        $thisSite = str_starts_with($target, $request->getSchemeAndHttpHost() . '/');
+
+        return $local || $thisSite
             ? $target
-            : $this->urlGenerator->generate('sylius_admin_admin_user_index'));
+            : $this->urlGenerator->generate('sylius_admin_admin_user_index');
     }
 
     public static function csrfTokenId(string $operation, int|string $id): string

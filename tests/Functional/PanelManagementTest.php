@@ -62,6 +62,53 @@ final class PanelManagementTest extends FunctionalTestCase
         self::assertResponseRedirects('/admin/two-factor/setup', null, 'a reset account pairs again even with an optional policy');
     }
 
+    /**
+     * Behind a reverse proxy that mounts the shop under a prefix (`X-Forwarded-Prefix: /store`),
+     * the forms must carry the page's full address: a bare request path would lose the prefix
+     * and the browser would land on whatever else lives at the root of the domain.
+     */
+    public function testBehindAPrefixTheFormsGoBackToTheFullAddress(): void
+    {
+        $prefix = ['HTTP_X_FORWARDED_PREFIX' => '/store'];
+        $target = $this->createAdmin(self::TOTP_SECRET);
+        $this->client->loginUser($this->createAdmin(self::TOTP_SECRET), 'admin');
+
+        $crawler = $this->client->request('GET', '/admin/users/', [], [], $prefix);
+        self::assertResponseIsSuccessful();
+        self::assertSame(
+            'http://localhost/store/admin/users/',
+            $crawler->filter('form[action="/store/admin/users/' . self::id($target) . '/two-factor/reset"] input[name="_redirect"]')->attr('value'),
+        );
+
+        $crawler = $this->client->request('GET', '/admin/users/' . self::id($target) . '/edit', [], [], $prefix);
+        $form = $crawler->filter('form#calmfox-admin-two-factor-reset');
+        self::assertSame('http://localhost/store/admin/users/' . self::id($target) . '/edit', $form->filter('input[name="_redirect"]')->attr('value'));
+
+        // the proxy strips the prefix before the request reaches the application
+        $this->client->request('POST', '/admin/users/' . self::id($target) . '/two-factor/reset', [
+            '_csrf_token' => $form->filter('input[name="_csrf_token"]')->attr('value'),
+            '_redirect' => $form->filter('input[name="_redirect"]')->attr('value'),
+        ], [], $prefix);
+
+        self::assertResponseRedirects('http://localhost/store/admin/users/' . self::id($target) . '/edit');
+        self::assertTrue($this->reload($target)->isTwoFactorSetupRequired());
+    }
+
+    public function testAnotherSiteIsNeverARedirectTarget(): void
+    {
+        $target = $this->createAdmin(self::TOTP_SECRET);
+        $this->client->loginUser($this->createAdmin(self::TOTP_SECRET), 'admin');
+
+        $crawler = $this->client->request('GET', '/admin/users/' . self::id($target) . '/edit');
+        $form = $crawler->filter('form#calmfox-admin-two-factor-disable');
+        $this->client->request('POST', '/admin/users/' . self::id($target) . '/two-factor/disable', [
+            '_csrf_token' => $form->filter('input[name="_csrf_token"]')->attr('value'),
+            '_redirect' => 'https://evil.example/',
+        ]);
+
+        self::assertResponseRedirects('/admin/users/');
+    }
+
     public function testTurningOffRemovesTheMethodsAndLeavesTheRestToThePolicy(): void
     {
         $target = $this->createAdmin(self::TOTP_SECRET);
