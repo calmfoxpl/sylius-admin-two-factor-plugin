@@ -5,6 +5,8 @@ All notable changes to this project are documented in this file. The format foll
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-10
+
 ### Fixed
 
 - Behind a reverse proxy that mounts the shop under a prefix (`X-Forwarded-Prefix`, e.g. `example.com/store`), *Reset two-factor* and *Turn off* (grid and edit page) went back to the bare request path, lost the prefix and landed on whatever lives at the root of the domain. The forms now carry the page's full address and the controller accepts it as long as it points at this site.
@@ -49,7 +51,8 @@ All notable changes to this project are documented in this file. The format foll
 - Access to the 2FA pages granted by route name; the policy condition and the admin form renderer apply to administrators only.
 - English and Polish translations.
 
-[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/calmfoxpl/sylius-admin-two-factor-plugin/compare/v1.0.0...v1.1.0
