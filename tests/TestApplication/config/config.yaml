@@ -36,3 +36,9 @@ security:
                 check_path: calmfox_admin_two_factor_login_check
                 default_target_path: sylius_admin_dashboard
                 enable_csrf: true
+
+# The test client comes from 127.0.0.1: trust it, so a test can mount the application under a
+# prefix with X-Forwarded-Prefix the way a reverse proxy does.
+framework:
+    trusted_proxies: '127.0.0.1'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
